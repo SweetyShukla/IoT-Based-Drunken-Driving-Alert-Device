@@ -10,7 +10,6 @@ SoftwareSerial sim(9,10); //9-RX pin of Arduino, 10- TX pin of Arduino
 TinyGPS gps;
 
 int value; //Variable to store data from the sensor
-int c=1;
 float x; //Actual value of alcohol in mg/L
 
 void setup() {
@@ -34,9 +33,9 @@ void sendMessage()
     delay(1000);
     sim.println("AT+CMGS=\"+918280079489\"\r");
     delay(1000);
-    //sim.print("Name- Ajay, Veh No- OD07869, Alcohol level-");
+    sim.print("Name- Ajay, Veh No- OD07869, Alcohol level-");
     sim.print(x);
-    sim.print("mg/l");
+    sim.print("mg/l at location-");
     sim.print("   http://maps.google.com/maps?q=loc:");
     sim.print(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flat, 6);
     sim.print(",");
@@ -56,15 +55,11 @@ void loop() {
   lcd.print(x);
   lcd.print("mg/L");
   delay(3000);
-  if(x>0.06)
+  if(x>0.08)
   {
     lcd.print(" Drunk");
-       if(c!=0)
-         {
-            c=0;
-            sendMessage();
-            delay(5000);
-          }
+    sendMessage();
+    delay(5000);
   }
   else
   {
